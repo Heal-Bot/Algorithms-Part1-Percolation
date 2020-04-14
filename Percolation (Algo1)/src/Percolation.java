@@ -7,13 +7,13 @@ public class Percolation {
  private final  WeightedQuickUnionUF normalGrid;
  private final boolean[][] grid;
  private static int size;
- private int openSites = 0;
+ private int openSites;
  private int topSite;
  private int bottomSite;
  
 	    // creates n-by-n grid, with all sites initially blocked
 	    public Percolation(int n) {
-	    	
+	    	openSites = 0;
 			if(n <=0 ) {
 	    		throw new IllegalArgumentException("n cannont be 0 or less");
 	    	}
@@ -23,7 +23,7 @@ public class Percolation {
 	    			grid[i][j] = false;
 	    		}
 	    	}
-	    		normalGrid = new WeightedQuickUnionUF(n*n+2);
+	    		normalGrid = new WeightedQuickUnionUF(n*n+1);
 	    		topSite = n*n;
 	    		bottomSite= n*n+1;
 	    		size = n;
@@ -36,8 +36,9 @@ public class Percolation {
 
 	    // opens the site (row, col) if it is not open already
 	    public void open(int row, int col) {
+	    	
 	    	if(row <size && col<size) {
-	    		if(!isOpen(row,col))
+	    		if(!isOpen(row,col)){
 	    		grid[row][col] = true;
 	    		openSites += 1;
 	    		if(this.isOpen(row-1,col)) {
@@ -55,18 +56,18 @@ public class Percolation {
 	    		if(row==0) {this.normalGrid.union(convertInto2d(row, col), topSite);}
 	    		if(row==size-1) {this.normalGrid.union(convertInto2d(row, col), bottomSite);}
 	    		
-	    		}else throw new IllegalArgumentException("Row and Col must be within the bounds");
-	    }
+	    		}
+	    }else throw new IllegalArgumentException("Row and Col must be within the bounds");
 	    
-	    		
+	}    		
 	    
 	    	
 	    
 	    // is the site (row, col) open?
 	    public boolean isOpen(int row, int col) {
-	    	if(row < size && row >= 0 && col >= 0 && col < size) {
+	    	
 	    		return grid[row][col];	
-	    }else return false;
+	   
 	    }
 	    
 
@@ -91,14 +92,7 @@ public class Percolation {
 
 	    // test client (optional)
 	    public static void main(String[] args) {
-	    	Percolation perc = new  Percolation(3);
-	    	perc.open(0, 0);
-	    	perc.open(1, 0);
-	    	perc.open(2, 0);
-	    	System.out.print(perc.normalGrid.connected(convertInto2d(0, 0),convertInto2d(2,0)));
-	    	System.out.println(perc.isFull(1, 0));
-	    	System.out.println(perc.percolates());
-	    	
+	  
 	    	
 	    }
 	}
